@@ -1,0 +1,15 @@
+# Ignoriere alle .class-Dateien
+*.class
+
+# Ignoriere alle .prefs-Dateien
+*.prefs
+
+# Ignoriere den gesamten bin-Ordner
+bin/
+
+# Ignoriere bestimmte Dateien
+path/to/your/file.txt
+.DS_Store
+.classpath
+.project
+Planung.drawio
