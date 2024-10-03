@@ -27,27 +27,19 @@ public class ButtonFunctionality implements ActionListener {
 			}
 		}
 		if(gameLogic.checkWin("X")) {
-			gui.move.setText("");
-			gui.result.setText("Spieler X hat gewonnen!");
+			gui.setWinningText("X");
 			deactivateFunctionalityFromAllFields();
 		}
 		else {
 			int[] ratings = cpu.rateFields();
-			//Debugging
-			for(int i = 0; i<ratings.length; i++) {
-				System.out.println("Bewertung Feld: " + i + " " + ratings[i]);
-			}
 			int position = cpu.cpuMove(ratings);
 			deactivateFunctionalityFromField(position);
 			if(gameLogic.checkWin("O")) {
-				gui.move.setText("");
-				gui.result.setText("Spieler O hat gewonnen!");
+				gui.setWinningText("O");
 				deactivateFunctionalityFromAllFields();
 			}
 			else if(gameLogic.draw()) {
-				gui.move.setText("");
-				gui.result.setBounds(120,0,300,100);
-				gui.result.setText("Unentschieden!");
+				gui.setWinningText("draw");
 				deactivateFunctionalityFromAllFields();
 			}
 		}
@@ -71,10 +63,15 @@ public class ButtonFunctionality implements ActionListener {
 		}
 	}
 	
+	//Sorgt dafür, dass ein Feld an der übergebenen Stelle nicht mehr ankilckbar ist
 	public void deactivateFunctionalityFromField(int position) {
-		if(position != -1) {
-			JButton[] fields = gui.getFields();
-			fields[position].removeActionListener(this);
+		//Nur ausführen wenn position eine Zahl von 0-9 ist
+		int[] validPosition = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+		for(int i = 0; i<validPosition.length; i++) {
+			if(validPosition[i] == position) {
+				JButton[] fields = gui.getFields();
+				fields[position].removeActionListener(this);
+			}
 		}
 	}
 	

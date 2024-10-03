@@ -9,10 +9,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class Gui {
-	JFrame frame;
-	JButton fields[];
-	JPanel blackPanel, whitePanel;
-	JLabel result, move;
+	private JFrame frame;
+	private JButton fields[];
+	private JPanel blackPanel, whitePanel;
+	private JLabel result, move;
 	
 	
 	
@@ -81,6 +81,23 @@ public class Gui {
 		
 		frame.setVisible(true);
 
+	}
+	
+	
+	public void setWinningText(String player) {
+		if(player == "X") {
+			move.setText("");
+			result.setText("Spieler X hat gewonnen!");
+		}
+		else if(player == "O"){
+			move.setText("");
+			result.setText("Spieler O hat gewonnen!");
+		}
+		else {
+			move.setText("");
+			result.setBounds(120,0,300,100);
+			result.setText("Unentschieden!");
+		}
 	}
 	
 	
