@@ -31,20 +31,25 @@ public class ButtonFunctionality implements ActionListener {
 			gui.result.setText("Spieler X hat gewonnen!");
 			deactivateFunctionalityFromAllFields();
 		}
-		else if(gameLogic.checkWin("O")) {
-			gui.move.setText("");
-			gui.result.setText("Spieler O hat gewonnen!");
-			deactivateFunctionalityFromAllFields();
-		}
-		else if(gameLogic.draw()) {
-			gui.move.setText("");
-			gui.result.setBounds(120,0,300,100);
-			gui.result.setText("Unentschieden!");
-			deactivateFunctionalityFromAllFields();
-		}
 		else {
-			int position = cpu.cpuMove(cpu.rateFields());
+			int[] ratings = cpu.rateFields();
+			//Debugging
+			for(int i = 0; i<ratings.length; i++) {
+				System.out.println("Bewertung Feld: " + i + " " + ratings[i]);
+			}
+			int position = cpu.cpuMove(ratings);
 			deactivateFunctionalityFromField(position);
+			if(gameLogic.checkWin("O")) {
+				gui.move.setText("");
+				gui.result.setText("Spieler O hat gewonnen!");
+				deactivateFunctionalityFromAllFields();
+			}
+			else if(gameLogic.draw()) {
+				gui.move.setText("");
+				gui.result.setBounds(120,0,300,100);
+				gui.result.setText("Unentschieden!");
+				deactivateFunctionalityFromAllFields();
+			}
 		}
 	}
 	
