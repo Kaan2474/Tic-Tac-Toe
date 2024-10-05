@@ -31,18 +31,32 @@ public class ButtonFunctionality implements ActionListener {
 			deactivateFunctionalityFromAllFields();
 		}
 		else {
-			int[] ratings = cpu.rateFields();
-			int position = cpu.cpuMove(ratings);
-			deactivateFunctionalityFromField(position);
-			if(gameLogic.checkWin("O")) {
-				gui.setWinningText("O");
-				deactivateFunctionalityFromAllFields();
-			}
-			else if(gameLogic.draw()) {
-				gui.setWinningText("draw");
-				deactivateFunctionalityFromAllFields();
-			}
-		}
+            // CPU-Zug in einem separaten Thread ausführen
+            new Thread(() -> {
+                try {
+                    // Verzögerung nur für den CPU-Zug
+                    Thread.sleep(1000); // 1 Sekunde Verzögerung
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+                
+                // CPU Zug nach der Verzögerung
+                int[] ratings = cpu.rateFields();
+                int position = cpu.cpuMove(ratings);
+                
+                // Zurück in den Event-Dispatch-Thread wechseln, um die GUI zu aktualisieren
+                javax.swing.SwingUtilities.invokeLater(() -> {
+                    deactivateFunctionalityFromField(position);
+                    if (gameLogic.checkWin("O")) {
+                        gui.setWinningText("O");
+                        deactivateFunctionalityFromAllFields();
+                    } else if (gameLogic.draw()) {
+                        gui.setWinningText("draw");
+                        deactivateFunctionalityFromAllFields();
+                    }
+                });
+            }).start();
+        }
 	}
 	
 	
