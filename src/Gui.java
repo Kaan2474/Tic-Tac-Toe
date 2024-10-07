@@ -12,7 +12,7 @@ public class Gui {
 	private JFrame frame;
 	private JButton fields[];
 	private JPanel blackPanel, whitePanel;
-	private JLabel result, move;
+	private JLabel gameResult, turnStatus;
 	
 	
 	
@@ -64,16 +64,16 @@ public class Gui {
 		
 		//Erstellung und Bearbeitung der Benachrichtigungen
 		//result = Sieg/Unentschieden
-		result = new JLabel();
-		result.setBounds(75,0,300,100);
-		result.setFont(new Font("Arial", Font.BOLD, 20));
+		gameResult = new JLabel();
+		gameResult.setBounds(75,0,300,100);
+		gameResult.setFont(new Font("Arial", Font.BOLD, 20));
 		//move = Aktion
-		move = new JLabel();
-		move.setBounds(90,0,300,100);
-		move.setFont(new Font("Arial", Font.BOLD, 20));
+		turnStatus = new JLabel();
+		turnStatus.setBounds(90,0,300,100);
+		turnStatus.setFont(new Font("Arial", Font.BOLD, 20));
 		//Benachrichtigung wird weißem Feld hinzugefügt
-		whitePanel.add(result);
-		whitePanel.add(move);
+		whitePanel.add(gameResult);
+		whitePanel.add(turnStatus);
 		
 		//Container dem frame hinzufügen
 		frame.add(blackPanel);
@@ -84,19 +84,19 @@ public class Gui {
 	}
 	
 	
-	public void setWinningText(String player) {
+	public void setGameResult(String player) {
 		if(player == "X") {
-			move.setText("");
-			result.setText("Spieler X hat gewonnen!");
+			setTurnStatus("");
+			gameResult.setText("Spieler X hat gewonnen!");
 		}
 		else if(player == "O"){
-			move.setText("");
-			result.setText("Spieler O hat gewonnen!");
+			setTurnStatus("");
+			gameResult.setText("Spieler O hat gewonnen!");
 		}
 		else {
-			move.setText("");
-			result.setBounds(120,0,300,100);
-			result.setText("Unentschieden!");
+			setTurnStatus("");
+			gameResult.setBounds(120,0,300,100);
+			gameResult.setText("Unentschieden!");
 		}
 	}
 	
@@ -106,12 +106,12 @@ public class Gui {
 	}
 	
 	
-	public JLabel getResult() {
-		return result;
+	public void setTurnStatus(String text) {
+		turnStatus.setText(text);
 	}
 	
 	
-	public JLabel getMove() {
-		return move;
+	public JLabel getTurnStatus() {
+		return turnStatus;
 	}
 }

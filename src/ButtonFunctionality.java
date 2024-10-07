@@ -12,8 +12,7 @@ public class ButtonFunctionality implements ActionListener {
 		this.gui = gui;
 		this.gameLogic = gameLogic;
 		this.cpu = cpu;
-		activateFunctionalityForAllFields();
-		deactivateFunctionalityFromField(cpu.getPositionOfFirstMove());
+		activateFunctionalityOfFreeFields();
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -22,37 +21,45 @@ public class ButtonFunctionality implements ActionListener {
 			if(e.getSource() == fields[i]) {
 				if(fields[i].getText().isEmpty()) {
 					fields[i].setText("X");
-					fields[i].removeActionListener(this);
+					deactivateFunctionalityFromAllFields();
 				}
 			}
 		}
 		if(gameLogic.checkWin("X")) {
-			gui.setWinningText("X");
-			deactivateFunctionalityFromAllFields();
+			gui.setTurnStatus("");
+			gui.setGameResult("X");
 		}
 		else {
+			gui.setTurnStatus("Spieler O ist dran!");
             // CPU-Zug in einem separaten Thread ausführen
             new Thread(() -> {
                 try {
                     // Verzögerung nur für den CPU-Zug
-                    Thread.sleep(1000); // 1 Sekunde Verzögerung
+                    Thread.sleep(1500);
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }
                 
                 // CPU Zug nach der Verzögerung
-                int[] ratings = cpu.rateFields();
-                int position = cpu.cpuMove(ratings);
+                int[] ratedFields = cpu.rateFields();
+                //Debugging
+                for (int i = 0; i<ratedFields.length; i++) {
+                	System.out.println("Rating " + i + ": " + ratedFields[i]);
+                }
+                cpu.cpuMove(ratedFields);
                 
                 // Zurück in den Event-Dispatch-Thread wechseln, um die GUI zu aktualisieren
                 javax.swing.SwingUtilities.invokeLater(() -> {
-                    deactivateFunctionalityFromField(position);
                     if (gameLogic.checkWin("O")) {
-                        gui.setWinningText("O");
-                        deactivateFunctionalityFromAllFields();
+                    	gui.setTurnStatus("");
+                        gui.setGameResult("O");
                     } else if (gameLogic.draw()) {
-                        gui.setWinningText("draw");
-                        deactivateFunctionalityFromAllFields();
+                    	gui.setTurnStatus("");
+                        gui.setGameResult("draw");
+                    }
+                    else {
+                    	gui.setTurnStatus("Wähle ein leeres Feld!");
+                    	activateFunctionalityOfFreeFields();
                     }
                 });
             }).start();
@@ -69,22 +76,12 @@ public class ButtonFunctionality implements ActionListener {
 	}
 	
 	
-	//Aktiviert alle Knöpfe(wenn Spiel anfängt)
-	public void activateFunctionalityForAllFields() {
+	//Aktiviert alle die Funktionalität für alle freien Felder
+	public void activateFunctionalityOfFreeFields() {
 		JButton[] fields = gui.getFields();
-		for(int i=0; i<fields.length; i++) {
-			fields[i].addActionListener(this);
-		}
-	}
-	
-	//Sorgt dafür, dass ein Feld an der übergebenen Stelle nicht mehr ankilckbar ist
-	public void deactivateFunctionalityFromField(int position) {
-		//Nur ausführen wenn position eine Zahl von 0-9 ist
-		int[] validPosition = {0, 1, 2, 3, 4, 5, 6, 7, 8};
-		for(int i = 0; i<validPosition.length; i++) {
-			if(validPosition[i] == position) {
-				JButton[] fields = gui.getFields();
-				fields[position].removeActionListener(this);
+		for (int i = 0; i<fields.length; i++) {
+			if(fields[i].getText().isEmpty()) {
+				fields[i].addActionListener(this);
 			}
 		}
 	}
