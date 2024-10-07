@@ -6,7 +6,8 @@ public class Main {
 		Gui gui = new Gui();
         GameLogic gameLogic = new GameLogic(gui);
         Cpu cpu = new Cpu(gui, gameLogic);
-        ButtonFunctionality buttonHandler = new ButtonFunctionality(gui, gameLogic, cpu);
+        FieldFunctionality fieldFunctionality = new FieldFunctionality(gui, gameLogic, cpu);
+        RestartButtonFunctionality restartButtonFunctionality = new RestartButtonFunctionality(gui, gameLogic, cpu, fieldFunctionality);
 	}
 
 }

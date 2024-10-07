@@ -1,8 +1,5 @@
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -11,6 +8,7 @@ import javax.swing.JPanel;
 public class Gui {
 	private JFrame frame;
 	private JButton fields[];
+	private JButton restartButton;
 	private JPanel blackPanel, whitePanel;
 	private JLabel gameResult, turnStatus;
 	
@@ -19,13 +17,13 @@ public class Gui {
 	public Gui() {
 	
 		frame = new JFrame("Tic Tac Toe");
-		frame.setSize(400, 500);
+		frame.setSize(400, 600);
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(null);
 		
-		//Container für die Felder
+		//Container für die Spielfelder
 		blackPanel = new JPanel();
 		blackPanel.setBounds(0, 100, 500, 700);
 		blackPanel.setLayout(null);
@@ -37,41 +35,36 @@ public class Gui {
 		whitePanel.setLayout(null);
 		whitePanel.setBackground(Color.white);
 		
-		//Erstellung und Bearbeitung der 9 Felder
-		fields = new JButton[9];
-		for(int i=0;i<fields.length;i++) {
-			fields[i] = new JButton();
-			fields[i].setFont(new Font("Arial", Font.BOLD, 50));
-		}
-		
-		
-		//Positionen der Felder
-		fields[0].setBounds(50, 50, 100, 100);
-		fields[1].setBounds(50, 150, 100, 100);
-		fields[2].setBounds(50, 250, 100, 100);
-		fields[3].setBounds(150, 50, 100, 100);
-		fields[4].setBounds(150, 150, 100, 100);
-		fields[5].setBounds(150, 250, 100, 100);
-		fields[6].setBounds(250, 50, 100, 100);
-		fields[7].setBounds(250, 150, 100, 100);
-		fields[8].setBounds(250, 250, 100, 100);
+		//Erstellung und Styling der 9 Spielfelder
+		createFields();
+		styleFields();
+		//Setzt die Position der Felder
+		setPositionsOfFields();
 		
 		//Felder werden dem schwarzen Container hinzugefügt
 		for(int i=0;i<fields.length;i++) {
 			blackPanel.add(fields[i]);
 		}
 		
+		//Erstellung des Buttons für Neustart
+		restartButton = new JButton("Neustart");
+		restartButton.setBounds(140, 400, 125, 25);
+		blackPanel.add(restartButton);
+		
 		
 		//Erstellung und Bearbeitung der Benachrichtigungen
-		//result = Sieg/Unentschieden
+		
+		//gameResult -->  Signalisiert ob Sieg, Niederlage oder unentschieden
 		gameResult = new JLabel();
 		gameResult.setBounds(75,0,300,100);
 		gameResult.setFont(new Font("Arial", Font.BOLD, 20));
-		//move = Aktion
+		
+		//turnStatus --> Signalisiert wer am Zug ist
 		turnStatus = new JLabel();
 		turnStatus.setBounds(90,0,300,100);
 		turnStatus.setFont(new Font("Arial", Font.BOLD, 20));
-		//Benachrichtigung wird weißem Feld hinzugefügt
+		
+		//Benachrichtigungen werden dem weißem Feld hinzugefügt
 		whitePanel.add(gameResult);
 		whitePanel.add(turnStatus);
 		
@@ -84,7 +77,47 @@ public class Gui {
 	}
 	
 	
-	public void setGameResult(String player) {
+	//Erstellung der 9 Felder
+	public void createFields() {
+		fields = new JButton[9];
+		for(int i=0; i<fields.length; i++) {
+			fields[i] = new JButton();
+		}
+	}
+	
+	
+	//Styling der 9 Felder
+	public void styleFields() {
+		for(int i=0; i<fields.length; i++) {
+			fields[i].setFont(new Font("Arial", Font.BOLD, 50));
+		}
+	}
+	
+	
+	public void setPositionsOfFields() {
+		int width = 100;
+		int height = 100;
+		fields[0].setBounds(50, 50, width, height);
+		fields[1].setBounds(50, 150, width, height);
+		fields[2].setBounds(50, 250, width, height);
+		fields[3].setBounds(150, 50, width, height);
+		fields[4].setBounds(150, 150, width, height);
+		fields[5].setBounds(150, 250, width, height);
+		fields[6].setBounds(250, 50, width, height);
+		fields[7].setBounds(250, 150, width, height);
+		fields[8].setBounds(250, 250, width, height);
+	}
+	
+	
+	//Löscht die Eingaben aus allen Feldern
+	public void resetAllFields() {
+		for(int i = 0; i<fields.length; i++) {
+			fields[i].setText("");
+		}
+	}
+	
+	
+	public void setTextAfterGame(String player) {
 		if(player == "X") {
 			setTurnStatus("");
 			gameResult.setText("Spieler X hat gewonnen!");
@@ -101,17 +134,27 @@ public class Gui {
 	}
 	
 	
+	//Getter und Setter Methoden
+	
 	public JButton[] getFields() {
 		return fields;
 	}
 	
 	
+	public JButton getRestartButton() {
+		return restartButton;
+	}
+	
+	public void setGameResult(String text) {
+		gameResult.setText(text);
+	}
+	
 	public void setTurnStatus(String text) {
 		turnStatus.setText(text);
 	}
 	
-	
 	public JLabel getTurnStatus() {
 		return turnStatus;
 	}
+	
 }

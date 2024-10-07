@@ -1,6 +1,5 @@
 import java.awt.Color;
 import java.util.Random;
-
 import javax.swing.JButton;
 
 public class GameLogic {
@@ -15,7 +14,7 @@ public class GameLogic {
 	
 	//0 = Spieler X ist dran, 1 = Spieler O ist dran
 	//Gibt zufällig 0 oder 1 aus
-	public static int createRandomTurn() {
+	public int createRandomTurn() {
 		Random r = new Random();
 		int number = r.nextInt(2);
 		return number;
@@ -72,9 +71,14 @@ public class GameLogic {
 	}
 	
 	
-	
+	//Getter und Setter Methoden
 	public int getTurn() {
 		return turn;
 	}
+	
+	public void setTurn(int turn) {
+		this.turn = turn;
+	}
+	
 	
 }

@@ -1,14 +1,13 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 
-public class ButtonFunctionality implements ActionListener {
+public class FieldFunctionality implements ActionListener {
 	private Cpu cpu;
 	private GameLogic gameLogic;
 	private Gui gui;
 	
-	public ButtonFunctionality(Gui gui, GameLogic gameLogic, Cpu cpu) {
+	public FieldFunctionality(Gui gui, GameLogic gameLogic, Cpu cpu) {
 		this.gui = gui;
 		this.gameLogic = gameLogic;
 		this.cpu = cpu;
@@ -27,7 +26,7 @@ public class ButtonFunctionality implements ActionListener {
 		}
 		if(gameLogic.checkWin("X")) {
 			gui.setTurnStatus("");
-			gui.setGameResult("X");
+			gui.setTextAfterGame("X");
 		}
 		else {
 			gui.setTurnStatus("Spieler O ist dran!");
@@ -42,20 +41,16 @@ public class ButtonFunctionality implements ActionListener {
                 
                 // CPU Zug nach der Verzögerung
                 int[] ratedFields = cpu.rateFields();
-                //Debugging
-                for (int i = 0; i<ratedFields.length; i++) {
-                	System.out.println("Rating " + i + ": " + ratedFields[i]);
-                }
                 cpu.cpuMove(ratedFields);
                 
                 // Zurück in den Event-Dispatch-Thread wechseln, um die GUI zu aktualisieren
                 javax.swing.SwingUtilities.invokeLater(() -> {
                     if (gameLogic.checkWin("O")) {
                     	gui.setTurnStatus("");
-                        gui.setGameResult("O");
+                        gui.setTextAfterGame("O");
                     } else if (gameLogic.draw()) {
                     	gui.setTurnStatus("");
-                        gui.setGameResult("draw");
+                        gui.setTextAfterGame("draw");
                     }
                     else {
                     	gui.setTurnStatus("Wähle ein leeres Feld!");
@@ -76,10 +71,10 @@ public class ButtonFunctionality implements ActionListener {
 	}
 	
 	
-	//Aktiviert alle die Funktionalität für alle freien Felder
+	//Aktiviert die Funktionalität für alle freien Felder
 	public void activateFunctionalityOfFreeFields() {
 		JButton[] fields = gui.getFields();
-		for (int i = 0; i<fields.length; i++) {
+		for(int i = 0; i<fields.length; i++) {
 			if(fields[i].getText().isEmpty()) {
 				fields[i].addActionListener(this);
 			}
